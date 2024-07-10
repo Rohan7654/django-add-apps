@@ -48,5 +48,5 @@ cd /path/to/your/django/project
 ```
 Run the CLI command with the --start-dir or -d option:
 ```python
-django-include-apps add_app my_new_app --start-dir ./config
+django-include-apps add_app my_new_app --start-dir /path/to/dir
 ```
