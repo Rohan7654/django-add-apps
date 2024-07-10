@@ -50,3 +50,8 @@ Run the CLI command with the --start-dir or -d option:
 ```python
 django-include-apps add_app my_new_app --start-dir /path/to/dir
 ```
+
+### TODO
+- [ ] Support including multiple packages in single command
+- [ ] Remove app added to INSTALLED_APPS
+- [ ] Auto generate requirements.txt and tracking it.
