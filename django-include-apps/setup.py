@@ -3,28 +3,29 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='django-add-apps-cli',       # Package name
-    version='0.1.0',         # Package version
+    name='django-include-apps',    
+    version='0.1.0',               
     packages=find_packages(),
     install_requires=[
-        'typer',             # Dependencies
+        'typer',                   
         'requests',
+        'inquirer'
     ],
     entry_points={
         'console_scripts': [
-            'django-include-apps = django-include-apps.main:app',   # CLI entry point
+            'django-include-apps=django_include_apps.main:app',   
         ],
     },
-    author='Rohan',
-    author_email='rohanroni2019@gamil.com',
-    description='CLI tool to install and add Django apps in INSTALLED_APPS',
+    author='ROHAN',
+    author_email='rohanroni2019@gmail.com',
+    description='CLI tool to install and add packages to Django in INSTALLED_APPS',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='',
+    url='https://github.com/Rohan7654/django-include-apps.git',
     license='MIT',
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.9',
     ],
 )

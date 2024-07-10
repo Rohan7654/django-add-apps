@@ -86,7 +86,6 @@ def add_app(new_app: str = typer.Argument(..., help="The new app to add to INSTA
     Add a new app to the INSTALLED_APPS list in settings.py if it's related to Django or already installed.
     """
     start_dir = start_dir or Path.cwd()
-    print(start_dir)
     settings_file_path = find_settings_file(start_dir)
 
     if settings_file_path:
