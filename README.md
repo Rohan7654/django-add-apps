@@ -67,7 +67,7 @@ cd /path/to/your/django/project
 ```
 Run the CLI command with the --start-dir or -d option:
 ```python
-django-include-apps add_apps add_apps <my_new_app1> <my_new_app2> <my_new_app3> --start-dir /path/to/dir
+django-include-apps add_apps <my_new_app1> <my_new_app2> <my_new_app3> --start-dir /path/to/dir
 ```
 
 ### TODO
