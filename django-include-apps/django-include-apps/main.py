@@ -6,6 +6,7 @@ import requests
 from pathlib import Path
 import inquirer
 import typer
+from importlib.metadata import PackageNotFoundError, version
 
 app = typer.Typer()
 
@@ -30,7 +31,7 @@ def append_to_installed_apps(file_path: Path, new_app: str):
     start, apps_list, end = match.groups()
     
     if f"'{new_app}'" in apps_list:
-        typer.secho(f"The app '{new_app}' already exists in INSTALLED_APPS.", fg=typer.colors.RED)
+        typer.secho(f"The app '{new_app}' already exists and will not be added to INSTALLED_APPS.", fg=typer.colors.RED)
         raise typer.Exit(code=1)
 
     new_apps_list = apps_list + f"\n\t'{new_app}',"
@@ -41,12 +42,20 @@ def append_to_installed_apps(file_path: Path, new_app: str):
 
     typer.secho(f"App '{new_app}' has been added to INSTALLED_APPS.", fg=typer.colors.GREEN)
 
-def is_package_installed(package: str) -> bool:
+def is_package_installed(package_name: str) -> bool:
+    """
+    Check if a package is installed in the current environment (virtual or system).
+
+    Args:
+        package_name (str): The name of the package to check.
+
+    Returns:
+        bool: True if the package is installed, False otherwise.
+    """
     try:
-        subprocess.run([sys.executable, "-m", "pip", "show", package], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        typer.secho(f"Package '{package}' has been installed Successfully", fg=typer.colors.GREEN)
+        version(package_name)
         return True
-    except subprocess.CalledProcessError:
+    except PackageNotFoundError:
         return False
 
 def install_package(package: str):
@@ -100,6 +109,8 @@ def add_app(new_app: str = typer.Argument(..., help="The new app to add to INSTA
             else:
                 typer.secho(f"Skipping installation of '{new_app}'.", fg=typer.colors.YELLOW)
                 raise typer.Exit(code=1)
+        else:
+                typer.secho(f"Package '{new_app}' has already installed.Skipping installation", fg=typer.colors.BRIGHT_YELLOW)
             
         if is_django_related(new_app):
             typer.secho(f"Searching for settings.py in {start_dir}", fg=typer.colors.BLUE)
@@ -119,7 +130,7 @@ def add_app(new_app: str = typer.Argument(..., help="The new app to add to INSTA
                 if second_answers["package_name"]!="":
                     append_to_installed_apps(settings_file_path, second_answers["package_name"])
             else:
-                typer.secho(f"Using '{new_app}' package name to be added in INSTALLED_APPS.", fg=typer.colors.GREEN)
+                typer.secho(f"Using '{new_app}' package name as the App name to be added in INSTALLED_APPS.", fg=typer.colors.BRIGHT_CYAN)
                 append_to_installed_apps(settings_file_path, new_app)
         else:
             typer.secho(f"The package '{new_app}' is not related to Django and will not be added to INSTALLED_APPS.", fg=typer.colors.RED)
