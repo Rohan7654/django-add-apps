@@ -6,6 +6,7 @@ import requests
 from pathlib import Path
 import inquirer
 import typer
+from typing import List
 from importlib.metadata import PackageNotFoundError, version
 
 app = typer.Typer()
@@ -41,6 +42,30 @@ def append_to_installed_apps(file_path: Path, new_app: str):
         file.write(new_content)
 
     typer.secho(f"App '{new_app}' has been added to INSTALLED_APPS.", fg=typer.colors.GREEN)
+
+def append_to_installed_apps_multi(file_path: Path, new_app: str):
+    with open(file_path, 'r') as file:
+        content = file.read()
+
+    pattern = re.compile(r"(INSTALLED_APPS\s*=\s*\[)(.*?)(\s*])", re.DOTALL)
+    match = pattern.search(content)
+
+    if not match:
+        typer.secho("The specified INSTALLED_APPS list was not found in the file.", fg=typer.colors.RED)
+        raise typer.Exit(code=1)
+
+    start, apps_list, end = match.groups()
+    
+    if f"'{new_app}'" not in apps_list:
+        new_apps_list = apps_list + f"\n\t'{new_app}',"
+        new_content = content[:match.start(2)] + new_apps_list + content[match.end(2):]
+
+        with open(file_path, 'w') as file:
+            file.write(new_content)
+
+        typer.secho(f"App '{new_app}' has been added to INSTALLED_APPS.", fg=typer.colors.GREEN)
+    else:
+        typer.secho(f"App '{new_app}' has already been added to INSTALLED_APPS.Skipping!", fg=typer.colors.BRIGHT_BLUE)
 
 def is_package_installed(package_name: str) -> bool:
     """
@@ -137,6 +162,56 @@ def add_app(new_app: str = typer.Argument(..., help="The new app to add to INSTA
     else:
         typer.secho("settings.py not found in the specified directory or its subdirectories.", fg=typer.colors.RED)
         raise typer.Exit(code=1)
+
+@app.command()
+def add_apps(package_names: List[str],start_dir: Path = typer.Option(None, "--start-dir", "-d", help="The directory to search for settings.py. Defaults to current directory.")):
+    """
+    Add one or more Django apps to INSTALLED_APPS in settings.py
+    """
+    start_dir = start_dir or Path.cwd()
+    settings_file_path = find_settings_file(start_dir)
+    
+    if not settings_file_path:
+        typer.echo("settings.py not found in the specified directory or its subdirectories.")
+        raise typer.Exit(code=1)
+    print(package_names)
+    for package_name in package_names:
+        print(package_name)
+        installed = is_package_installed(package_name)
+        if not installed:
+            install = [inquirer.Confirm("confirm", message=f"{package_name} is not installed. Do you want to install it?")]
+            install_confirm = inquirer.prompt(install)
+            if install_confirm["confirm"]:
+                typer.secho(f"Installing package '{package_name}'...", fg=typer.colors.BLUE)
+                install_package(package_name)
+                typer.secho(f"Package '{package_name}' has been installed.", fg=typer.colors.GREEN)
+            else:
+                typer.secho(f"Skipping installation of '{package_name}'.", fg=typer.colors.YELLOW)
+        else:
+                typer.secho(f"Package '{package_name}' has already installed.Skipping installation", fg=typer.colors.BRIGHT_YELLOW)
+            
+        if is_django_related(package_name):
+            typer.secho(f"Searching for settings.py in {start_dir}", fg=typer.colors.BLUE)
+            confirmation = [
+                    inquirer.List(
+                        "choice",
+                        message="Do you want to use the same username or a different one?",
+                        choices=['Use same', 'Use different'],
+                    ),
+            ]
+            answers = inquirer.prompt(confirmation)
+            if answers["choice"]=="Use different":
+                packagename_question = [
+                        inquirer.Text('package_name', message="Enter your package name as mentioned in the souce documentation")
+                ]
+                second_answers = inquirer.prompt(packagename_question)
+                if second_answers["package_name"]!="":
+                    append_to_installed_apps_multi(settings_file_path, second_answers["package_name"])
+            else:
+                typer.secho(f"Using '{package_name}' package name as the App name to be added in INSTALLED_APPS.", fg=typer.colors.BRIGHT_CYAN)
+                append_to_installed_apps_multi(settings_file_path, package_name)
+        else:
+            typer.secho(f"The package '{package_name}' is not related to Django and will not be added to INSTALLED_APPS.", fg=typer.colors.RED)
 
 if __name__ == "__main__":
     app()
