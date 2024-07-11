@@ -11,6 +11,13 @@ setup(
         'requests',
         'inquirer'
     ],
+    keywords='django-include-apps',
+    install_requires=[
+        'Django>=3.0',
+        'typer',
+        'requests',
+        'InquirerPy',
+    ],
     entry_points={
         'console_scripts': [
             'django-include-apps=django_include_apps.main:app',   
@@ -24,8 +31,16 @@ setup(
     url='https://github.com/Rohan7654/django-include-apps.git',
     license='MIT',
     classifiers=[
+        'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Framework :: Django',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
+    python_requires='>=3.8',
 )
