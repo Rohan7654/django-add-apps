@@ -60,7 +60,17 @@ Run the CLI command with the --start-dir or -d option:
 django-include-apps add_app my_new_app --start-dir /path/to/dir
 ```
 
+## Example 3: multiple python packages in a single line
+Suppose you want to install and include multiple packages and apps to Django project's settings.py file you can use this CLI.
+```sh
+cd /path/to/your/django/project
+```
+Run the CLI command with the --start-dir or -d option:
+```python
+django-include-apps add_apps add_apps <my_new_app1> <my_new_app2> <my_new_app3> --start-dir /path/to/dir
+```
+
 ### TODO
 - [x] Support including multiple packages in single command
-- [ ] Remove app added to INSTALLED_APPS
+- [ ] Remove one or more apps added to INSTALLED_APPS
 - [ ] Auto generate requirements.txt and tracking it.
