@@ -1,7 +1,7 @@
 # django-include-apps
 =====================================
 
-[![PyPI version](https://badge.fury.io/py/django-include-apps.svg)](https://pypi.org/project/django-include-apps/0.1.3/)
+[![PyPI version](https://badge.fury.io/py/django-include-apps/0.1.3/.svg)](https://pypi.org/project/django-include-apps/0.1.3/)
 [![Downloads](https://pepy.tech/badge/django-include-apps)](https://pypi.org/project/django-include-apps/0.1.3/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
