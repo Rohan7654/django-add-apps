@@ -1,4 +1,10 @@
 # django-include-apps
+=====================================
+
+[![PyPI version](https://badge.fury.io/py/django-include-apps.svg)](https://badge.fury.io/py/django-include-apps)
+[![Downloads](https://pepy.tech/badge/django-include-apps)](https://pypi.org/project/django-include-apps/0.1.0/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **django-include-apps** is a CLI tool to help you manage Django apps in the INSTALLED_APPS list in your Django project's settings.py file. This tool simplifies the process of adding new apps by ensuring they are properly installed and integrated into your Django project.
 
 # Features
@@ -20,8 +26,11 @@ To add a new app to INSTALLED_APPS, use the following command:
 ```
 django-include-apps add_app <new_app>
 ```
-
 Replace **<new_app>** with the name of the Django app you want to add.
+
+# Project Link
+For more details, visit the [PyPI project page](https://pypi.org/project/django-include-apps/0.1.0/)
+
 
 # Options:
 Use **--start-dir** or **-d** to specify the directory to search for settings.py. Defaults to the current directory if not provided.
